@@ -75,7 +75,7 @@ npm test
 
 ## Cloudflare Pages com GitHub
 
-**Publicado em 12/09/2026:** https://cestas-populares.pages.dev/. Projeto `cestas-populares` com integração Git; domínio próprio em ativação na Cloudflare. Estado, evidências e retomada em [docs/publicacao-cloudflare.md](docs/publicacao-cloudflare.md).
+**Publicado em 12/09/2026:** https://cestaspopulares.com.br/. Projeto `cestas-populares` com integração Git, domínio principal e www ativos com SSL. Endereço alternativo: https://cestas-populares.pages.dev/. Estado e evidências em [docs/publicacao-cloudflare.md](docs/publicacao-cloudflare.md).
 
 Configuração usada: **Workers & Pages → Create application → Pages → Connect to Git** (os rótulos podem variar), com acesso autorizado ao repositório `Celso81/CESTAS-BASICAS`.
 
