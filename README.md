@@ -24,7 +24,7 @@ npm run check:release
 ## Editar o negócio
 
 - **`src/config.mjs`**: marca, domínio, WhatsApp, contato, horário, responsável, identificação da empresa, privacidade, cidades, frete, prazo, pagamento e modo.
-- **`src/data/catalog.json`**: catálogo real. Começa vazio; o site exibe um convite à consulta sem inventar produtos. Até três cestas aparecem na inicial. A página de cestas mostra todo o catálogo confirmado.
+- **`src/data/catalog.json`**: catálogo real. Começa vazio; o site informa que o catálogo está em confirmação e permite pedir composição e orçamento sem inventar produtos. Até três cestas aparecem na inicial. A página de cestas mostra todo o catálogo confirmado.
 - **`src/pages.mjs` / `src/inner-pages.mjs`**: textos e páginas.
 - **`src/components.mjs`**: cabeçalho, rodapé, catálogo e contato compartilhados.
 - **`public/assets/`**: imagens, marca, CSS e JavaScript. O build copia para `dist/assets/`.
@@ -55,11 +55,15 @@ Cada produto em `catalog.json` aceita os seguintes campos. Preencha somente com 
 
 O arquivo é uma lista JSON (`[produto1, produto2]`). `price` é um número em reais, sem símbolo. Use `priceOnRequest: true` somente quando a venda sob consulta for confirmada. `availability`: `available`, `on_request` ou `unavailable`. `image` é opcional e deve começar com `/assets/`; o arquivo precisa existir em `public/assets/`. Sem foto, aparece apenas o símbolo neutro da cesta. `quantity` contém quantidade e unidade reais, por exemplo conforme a embalagem confirmada.
 
+Produtos marcados como confirmados e visíveis precisam ter ID único, nome, descrição, disponibilidade válida, itens com quantidades e preço finito positivo ou consulta explicitamente confirmada. O build recusa dados incompletos mesmo no modo de prévia, antes de substituir a saída anterior. Produtos indisponíveis continuam identificados no catálogo, mas não são sugeridos no formulário de interesse.
+
 Modalidades como parcelamento, compra sem cartão, crediário, fiado, boleto e dispensa de comprovante de renda têm `enabled` e `details`. Elas só são exibidas com ambos preenchidos. Boleto e parcelamento são configurações diferentes.
 
 ## Prévia e ativação comercial
 
 Estado entregue: **prévia**, WhatsApp confirmado **(81) 99771-6247**, catálogo vazio e cobertura não confirmada. Os links abrem o WhatsApp apenas após ação do visitante. Não há mensagem automática, coleta em banco de dados ou pedido automático.
+
+Catálogo, entregas e contato permitem preparar uma consulta com cidade, bairro e quantidade opcional de 1 a 999 cestas. As sugestões de cidades não afirmam cobertura. O visitante pode conferir a mensagem antes de abrir o WhatsApp; ela pede alimentos, marcas, tamanhos, quantidades, disponibilidade, preço, frete, prazo, total e pagamento. Sem JavaScript, o link direto continua disponível com o mesmo roteiro. Nada é enviado ao atendimento pelo site.
 
 A prévia usa `noindex, nofollow` no HTML e nos cabeçalhos, sitemap vazio e robots permitindo que buscadores leiam o `noindex`. Isso impede a solicitação de indexação; não é controle de acesso. Não compartilhe informações privadas. Deploys Cloudflare em branches diferentes de `main` são sempre prévia, mesmo com configuração de produção.
 
@@ -76,6 +80,8 @@ npm test
 ## Cloudflare Pages com GitHub
 
 **Publicado em 12/09/2026:** https://cestaspopulares.com.br/. Projeto `cestas-populares` com integração Git, domínio principal e www ativos com SSL. Endereço alternativo: https://cestas-populares.pages.dev/. Estado e evidências em [docs/publicacao-cloudflare.md](docs/publicacao-cloudflare.md).
+
+`/build-info.json` informa modo, rotas e o SHA do commit usado pelo Cloudflare Pages (`revision`). Em build local sem a variável `CF_PAGES_COMMIT_SHA`, a revisão é `null`. Use o SHA e o conteúdo publicado para conferir que o deploy esperado chegou ao domínio.
 
 Configuração usada: **Workers & Pages → Create application → Pages → Connect to Git** (os rótulos podem variar), com acesso autorizado ao repositório `Celso81/CESTAS-BASICAS`.
 

@@ -11,3 +11,12 @@
 - `check:release` registra 14 pendências comerciais esperadas. Não é falha da prévia: faltam dados reais e aprovação da operação para habilitar `production`.
 
 As verificações locais não comprovam entrega comercial, ranqueamento no Google, DNS ou publicação. Evidências de navegador e capturas ficam na pasta local ignorada `output/qa/`.
+
+## Melhoria do orçamento e proteção do catálogo — 12/09/2026
+
+- `npm run build`, `npm run check` e oito testes críticos aprovados após a mudança. A verificação percorre as oito páginas e confere links, âncoras, metadados, noindex, sitemap, imagens e sintaxe.
+- Nova consulta em `/cestas-basicas/`, compartilhada com entregas e contato: cidade/bairro opcionais, quantidade de 1 a 999 cestas, sugestões de cidades sem garantia de cobertura e mensagem completa revisável antes do WhatsApp.
+- A montagem da mensagem foi testada com acentos e quantidades válidas/inválidas; solicita composição, marcas, embalagens, disponibilidade, preço, frete, prazo, total e pagamento. Os links diretos preservam o uso sem JavaScript. Nenhuma mensagem foi enviada ao WhatsApp.
+- O catálogo vazio é identificado explicitamente. A validação recusa produtos confirmados com campos vazios, itens incompletos, disponibilidade desconhecida, preço não finito, ID duplicado ou caminho de imagem inválido. O formulário não oferece produtos marcados indisponíveis.
+- `npm run check:release` e `npm run build:production` seguem bloqueados pelas mesmas 14 pendências comerciais. Não houve liberação de noindex ou adição de URLs ao sitemap.
+- A alteração do formulário requer conferência visual própria; a rodada anterior de 24 combinações registrada acima não comprova o novo layout. A publicação e a conferência HTTP desta rodada são registradas separadamente.

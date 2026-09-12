@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import config from '../src/config.mjs';
-import { whatsappUrl, releaseIssues, resolveMode } from '../src/lib.mjs';
-import { contactButton, catalogCards, paymentDetails } from '../src/components.mjs';
+import { whatsappUrl, whatsappMessage, catalogIssues, releaseIssues, resolveMode } from '../src/lib.mjs';
+import { contactButton, catalogCards, inquiry, paymentDetails } from '../src/components.mjs';
 
 test('WhatsApp preserva acentos, espaços e dados reais preenchidos sem campos inventados', () => {
   const url = new URL(whatsappUrl(config.whatsapp, { basket: 'Feijão & arroz', city: 'São Lourenço da Mata', neighborhood: ' Centro ' }));
@@ -40,4 +40,33 @@ test('Dados incompletos bloqueiam produção e previews Cloudflare nunca viram p
   assert.ok(issues.includes('Catálogo real confirmado'));
   assert.equal(resolveMode({ ...config, mode: 'production' }, { CF_PAGES: '1', CF_PAGES_BRANCH: 'ajuste' }, true), 'preview');
   assert.equal(resolveMode({ ...config, mode: 'production' }, { CF_PAGES: '1', CF_PAGES_BRANCH: 'main' }), 'production');
+});
+
+test('Consulta pede orçamento completo e inclui apenas quantidades inteiras válidas', () => {
+  const message = whatsappMessage({ quantity: '3' });
+  assert.match(message, /Quero consultar 3 cestas/);
+  assert.match(message, /Alimentos, marcas, tamanhos e quantidades/);
+  assert.match(message, /Frete, prazo e valor total com entrega/);
+  assert.match(message, /antes de confirmar a compra/);
+  assert.match(whatsappMessage({ quantity: '1' }), /Quero consultar 1 cesta\./);
+  for (const quantity of ['', '0', '-2', '1.5', '1000', '<script>']) assert.doesNotMatch(whatsappMessage({ quantity }), /Quero consultar/);
+});
+
+test('Catálogo marcado como confirmado exige oferta completa, preço finito e IDs únicos', () => {
+  const product = { id: 'fixture', name: 'Cesta de teste', description: 'Dados exclusivos para teste.', confirmed: true, availability: 'on_request', priceOnRequest: true, items: [{ name: 'Item de teste', quantity: 'Uma unidade de teste' }] };
+  assert.deepEqual(catalogIssues([]), []);
+  assert.deepEqual(catalogIssues([product]), []);
+  assert.ok(catalogIssues({}).length);
+  assert.ok(catalogIssues([product, product]).some(issue => /duplicado/.test(issue)));
+  for (const changes of [{ items: [] }, { items: [{ name: 'Item', quantity: ' ' }] }, { description: ' ' }, { availability: 'inventada' }, { priceOnRequest: false, price: Infinity }, { image: '/assets/../privado.webp' }]) assert.ok(catalogIssues([{ ...product, ...changes }]).length);
+  assert.deepEqual(catalogIssues([{ ...product, confirmed: false, items: [] }]), []);
+});
+
+test('Consulta não apresenta produto indisponível e mantém contato direto sem JavaScript', () => {
+  const html = inquiry(config, [{ id: 'sem-estoque', name: 'Cesta indisponível', confirmed: true, availability: 'unavailable' }]);
+  assert.doesNotMatch(html, /<option value="Cesta indisponível"/);
+  assert.match(html, /class="message-preview"/);
+  assert.match(html, /As sugestões não confirmam cobertura/);
+  assert.match(html, /name="quantity" type="number" min="1"/);
+  assert.match(html, new RegExp(`href="https://wa.me/${config.whatsapp}`));
 });

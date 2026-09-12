@@ -10,4 +10,6 @@ Antes do lançamento: preencher os dados comerciais e o catálogo real; liberar 
 
 A qualidade do catálogo, informações completas do negócio, conteúdo útil e referências reais ao site continuam relevantes depois de publicar. A estrutura técnica prepara o site para ser compreendido e indexado; não garante posição, prazo ou volume de tráfego.
 
+Revisão de 12/09/2026 após a auditoria: a página de cestas passou a explicar a ausência do catálogo confirmado e preparar um pedido de orçamento com composição, quantidades, frete e total. As páginas de contato e entrega compartilham esse fluxo. Nenhum produto, valor ou área de entrega foi acrescentado sem confirmação. O bloqueio comercial continua integral: as sete páginas permanecem noindex e o sitemap vazio, pois ainda faltam dados essenciais comuns à operação. Não há página comercial pronta para liberação isolada neste estado.
+
 Fontes consultadas em 12/09/2026: [Guia de SEO do Google](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=pt-br), [navegação estruturada](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb?hl=pt-br) e [controle de indexação](https://developers.google.com/search/docs/crawling-indexing/block-indexing?hl=pt-br).

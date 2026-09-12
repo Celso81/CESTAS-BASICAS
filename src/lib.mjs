@@ -1,7 +1,24 @@
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 import { validWhatsapp } from '../public/assets/contact.mjs';
 export { validWhatsapp, whatsappUrl, whatsappMessage, formatWhatsapp } from '../public/assets/contact.mjs';
-export const confirmedProducts = catalog => catalog.filter(item => item.confirmed === true && item.visible !== false);
+export const confirmedProducts = catalog => Array.isArray(catalog) ? catalog.filter(item => item?.confirmed === true && item.visible !== false) : [];
+const filled = value => typeof value === 'string' && Boolean(value.trim());
+export function catalogIssues(catalog) {
+  if (!Array.isArray(catalog)) return ['Catálogo deve ser uma lista JSON'];
+  const issues = [];
+  const ids = new Set();
+  for (const item of confirmedProducts(catalog)) {
+    const label = filled(item.name) ? item.name : '(sem nome)';
+    if (typeof item.id !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.id) || ids.has(item.id)) issues.push(`ID inválido ou duplicado da cesta ${label}`);
+    ids.add(item.id);
+    if (!filled(item.name) || !filled(item.description)) issues.push(`Nome e descrição completos da cesta ${label}`);
+    if (!['available', 'on_request', 'unavailable'].includes(item.availability)) issues.push(`Disponibilidade válida da cesta ${label}`);
+    if (item.priceOnRequest !== true && !(Number.isFinite(item.price) && item.price > 0)) issues.push(`Preço real ou sob consulta confirmado para ${label}`);
+    if (!Array.isArray(item.items) || !item.items.length || !item.items.every(row => filled(row?.name) && filled(row?.quantity))) issues.push(`Itens e quantidades da cesta ${label}`);
+    if (item.image && (typeof item.image !== 'string' || !/^\/assets\/[^?#\\]+$/.test(item.image) || item.image.includes('..'))) issues.push(`Imagem local válida da cesta ${label}`);
+  }
+  return issues;
+}
 export function releaseIssues(config, catalog) {
   const issues = [];
   const require = (condition, label) => { if (!condition) issues.push(label); };
@@ -21,11 +38,7 @@ export function releaseIssues(config, catalog) {
     if (value && typeof value === 'object' && !Array.isArray(value) && value.enabled) require(value.details?.trim(), `Regras da modalidade ${key}`);
   }
   require(config.catalogConfirmed && confirmedProducts(catalog).length, 'Catálogo real confirmado');
-  for (const item of confirmedProducts(catalog)) {
-    require(item.id && item.name && item.description && item.availability && item.items?.length, `Dados completos da cesta ${item.name || '(sem nome)'}`);
-    require(item.priceOnRequest === true || (typeof item.price === 'number' && item.price > 0), `Preço real ou sob consulta confirmado para ${item.name}`);
-    require(item.items?.every(row => row.name && row.quantity), `Itens e quantidades da cesta ${item.name}`);
-  }
+  issues.push(...catalogIssues(catalog));
   require(config.terms.reviewed && config.terms.cancellation.trim() && config.terms.exchanges.trim(), 'Condições de compra, cancelamento e troca revisadas');
   require(config.commercialApproved, 'Conferência comercial final (commercialApproved)');
   return issues;

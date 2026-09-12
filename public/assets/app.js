@@ -1,4 +1,4 @@
-import { whatsappUrl } from './contact.mjs';
+import { whatsappMessage, whatsappUrl } from './contact.mjs';
 const menuButton = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
 if (menuButton && nav) {
@@ -17,16 +17,26 @@ if (menuButton && nav) {
 }
 for (const form of document.querySelectorAll('.inquiry-form')) {
   form.hidden = false;
-  form.addEventListener('submit', event => {
-    event.preventDefault();
+  const options = () => {
     const data = new FormData(form);
-    const url = whatsappUrl(form.dataset.whatsapp, {
+    return {
       brand: form.dataset.brand,
       city: String(data.get('city') || '').trim(),
       neighborhood: String(data.get('neighborhood') || '').trim(),
       basket: String(data.get('basket') || ''),
+      quantity: String(data.get('quantity') || ''),
       topic: form.dataset.topic || ''
-    });
+    };
+  };
+  const preview = form.querySelector('.message-preview');
+  const updateMessage = () => { if (preview) preview.textContent = whatsappMessage(options()); };
+  form.addEventListener('input', updateMessage);
+  form.addEventListener('change', updateMessage);
+  updateMessage();
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const url = whatsappUrl(form.dataset.whatsapp, options());
     if (!url) return;
     window.open(url, '_blank', 'noopener,noreferrer');
     const feedback = form.querySelector('.form-feedback');
