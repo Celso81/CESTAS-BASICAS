@@ -19,7 +19,7 @@ npm test
 npm run check:release
 ```
 
-`check` verifica as oito páginas, links, imagens, WhatsApp, metadados, indexação, sitemap, 404 e sintaxe. `test` confere os comportamentos críticos de contato e proteção comercial. `check:release` retorna código 1 enquanto houver dados comerciais pendentes; isso é esperado na prévia.
+`check` verifica as oito páginas, links, imagens, WhatsApp, metadados, indexação, sitemap, 404 e sintaxe. `test` confere os comportamentos críticos de contato e proteção comercial. `check:release` valida nome, domínio, WhatsApp e produtos publicados. `check:commercial` lista separadamente os dados comerciais a completar; seu resultado não bloqueia a publicação do site sob consulta.
 
 ## Editar o negócio
 
@@ -59,15 +59,15 @@ Produtos marcados como confirmados e visíveis precisam ter ID único, nome, des
 
 Modalidades como parcelamento, compra sem cartão, crediário, fiado, boleto e dispensa de comprovante de renda têm `enabled` e `details`. Elas só são exibidas com ambos preenchidos. Boleto e parcelamento são configurações diferentes.
 
-## Prévia e ativação comercial
+## Publicação e dados comerciais
 
-Estado entregue: **prévia**, WhatsApp confirmado **(81) 99771-6247**, catálogo vazio e cobertura não confirmada. Os links abrem o WhatsApp apenas após ação do visitante. Não há mensagem automática, coleta em banco de dados ou pedido automático.
+Estado atual: **produção**, com publicação normal e indexação autorizadas por Celso em 12/09/2026. WhatsApp confirmado **(81) 99771-6247**, catálogo vazio e cobertura sob consulta. Os links abrem o WhatsApp apenas após ação do visitante. Não há mensagem automática, coleta em banco de dados ou pedido automático.
 
 Catálogo, entregas e contato permitem preparar uma consulta com cidade, bairro e quantidade opcional de 1 a 999 cestas. As sugestões de cidades não afirmam cobertura. O visitante pode conferir a mensagem antes de abrir o WhatsApp; ela pede alimentos, marcas, tamanhos, quantidades, disponibilidade, preço, frete, prazo, total e pagamento. Sem JavaScript, o link direto continua disponível com o mesmo roteiro. Nada é enviado ao atendimento pelo site.
 
-A prévia usa `noindex, nofollow` no HTML e nos cabeçalhos, sitemap vazio e robots permitindo que buscadores leiam o `noindex`. Isso impede a solicitação de indexação; não é controle de acesso. Não compartilhe informações privadas. Deploys Cloudflare em branches diferentes de `main` são sempre prévia, mesmo com configuração de produção.
+O domínio principal usa `index, follow` nas sete páginas de conteúdo, sem faixa de prévia nem bloqueio global por `X-Robots-Tag`. O sitemap contém as sete URLs canônicas HTTPS e está declarado em `robots.txt`. A 404 continua sem indexação. Deploys Cloudflare em branches diferentes de `main` continuam em prévia: `noindex, nofollow`, sitemap vazio e robots permitindo a leitura do bloqueio. Isso não é controle de acesso.
 
-Para ativar: complete `check:release`, confirme identificação comercial e CNPJ quando aplicável (`business.registrationStatus`: `provided` ou `not_applicable`), catálogo, entregas, pagamento, canal de privacidade, retenção e regras de troca/cancelamento. Marque a revisão comercial e altere `mode` para `production`. Execute:
+Para publicar alterações, mantenha `mode: 'production'` e execute os comandos abaixo. Use `npm run check:commercial` para acompanhar o preenchimento de identificação comercial, catálogo, entregas, pagamento, privacidade e condições de compra. Não marque esses dados como confirmados sem os valores reais.
 
 ```sh
 npm run build:production
@@ -75,7 +75,7 @@ npm run check
 npm test
 ```
 
-`build:production` recusa a geração quando faltam dados. Em produção são gerados sete endereços no sitemap e a 404 continua `noindex`. Antes de publicar alterações futuras, revise textos e confirme que refletem a operação real. O JSON-LD usa apenas WebSite e BreadcrumbList com dados reais. Não há ofertas ou avaliações fictícias. O foco regional, a estrutura de conteúdo e o roteiro do Search Console estão em `docs/seo.md`.
+`build:production` recusa domínio/contato inválidos e produtos marcados como confirmados com dados incompletos. O site pode funcionar sob consulta com catálogo vazio. A publicação não altera `commercialApproved` nem confirma condições desconhecidas. O JSON-LD usa apenas WebSite e BreadcrumbList com dados reais. O foco regional, a estrutura de conteúdo e o roteiro do Search Console estão em `docs/seo.md`.
 
 ## Cloudflare Pages com GitHub
 

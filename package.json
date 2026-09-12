@@ -12,6 +12,7 @@
     "build:production": "node scripts/build.mjs --production",
     "check": "node scripts/check.mjs",
     "check:release": "node scripts/check-release.mjs",
+    "check:commercial": "node scripts/check-commercial.mjs",
     "test": "node --test tests/*.test.mjs"
   }
 }

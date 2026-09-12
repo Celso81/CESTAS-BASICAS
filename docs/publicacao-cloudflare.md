@@ -9,7 +9,7 @@
 - Integração Git autorizada por Celso. Commits em `main` disparam build e publicação.
 - Framework **None**, raiz do repositório, saída **dist**, variável **NODE_VERSION=22**.
 - Build: `npm run build && npm run check && npm test`; concluído com sucesso pela Cloudflare.
-- O site continua em **prévia comercial**, com `noindex, nofollow`, catálogo vazio e condições sob consulta, conforme o briefing. Hospedagem publicada não significa liberação de indexação.
+- Celso autorizou a **publicação normal** em 12/09/2026: modo production, sete páginas liberadas para indexação e sitemap completo. Catálogo e condições desconhecidas continuam sob consulta, sem marcar dados comerciais como confirmados.
 
 ## Domínio próprio ativo
 
@@ -27,12 +27,12 @@
 
 Em `cestas-populares.pages.dev` e `cestaspopulares.com.br`: sete páginas de conteúdo retornaram **200**, URL inexistente retornou **404 com a página de erro**, imagem WebP retornou **200** (215.872 bytes), `robots.txt` e `sitemap.xml` retornaram **200**. Conferidos títulos, canonical para o domínio principal e WhatsApp **(81) 99771-6247**. A aparência publicada e a lista das 14 cidades da RMR foram conferidas no navegador.
 
-A Cloudflare inseriu automaticamente seu beacon de RUM no domínio próprio. A coleta foi desativada em **Speed → Real user monitoring → Disable completely → Disable RUM**, para manter a política de privacidade prevista. A conferência de HTML usa `Accept: text/html`, pois a injeção pode não aparecer sem esse cabeçalho. A Cloudflare acrescenta seu bloco gerenciado ao `robots.txt`, preservando as diretivas do projeto; o bloqueio de indexação da prévia continua nos metadados e cabeçalhos.
+A Cloudflare inseriu automaticamente seu beacon de RUM no domínio próprio. A coleta foi desativada em **Speed → Real user monitoring → Disable completely → Disable RUM**, para manter a política de privacidade prevista. A conferência de HTML usa `Accept: text/html`, pois a injeção pode não aparecer sem esse cabeçalho. A Cloudflare acrescenta seu bloco gerenciado ao `robots.txt`, preservando as diretivas do projeto.
 
-`X-Robots-Tag: noindex, nofollow` confirmado na publicação. O sitemap está vazio de propósito enquanto a operação comercial não estiver confirmada. CSP e cabeçalhos de proteção do projeto estão presentes; HSTS não foi observado nesta etapa.
+Após a autorização de publicação normal, o build remove o bloqueio global `X-Robots-Tag: noindex, nofollow`; as sete páginas têm `index, follow`, e o sitemap lista todas as URLs canônicas de conteúdo. A 404 permanece noindex. CSP e cabeçalhos de proteção do projeto são preservados.
 
-## Próxima etapa: ativação comercial e SEO
+## Próxima etapa: Google Search Console
 
-Liberar indexação somente após completar os dados comerciais e passar `npm run check:release`, seguindo `README.md` e `docs/seo.md`. Depois de alterar o modo e publicar, conferir sitemap, robots e metadados no domínio final antes de solicitar indexação.
+Para 13/09/2026, Celso combinou verificar a propriedade, enviar o sitemap e solicitar indexação das URLs prioritárias. `npm run check:release` valida a publicação; `npm run check:commercial` mantém o relatório separado dos dados de negócio a completar. A publicação não inventa nem aprova esses dados.
 
 Não solicitar indexação da prévia no Google. Publicação, indexação, posições e operação comercial são verificações distintas.

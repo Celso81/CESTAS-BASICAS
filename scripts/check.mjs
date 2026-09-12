@@ -56,6 +56,7 @@ for (const route of info.routes) {
   }
   const shouldNoindex = info.mode === 'preview' || route === '/404.html';
   verify(html.includes(`name="robots" content="${shouldNoindex ? 'noindex, nofollow' : 'index, follow'}"`), `${route}: indexação incorreta.`);
+  verify(html.includes('class="preview-notice"') === (info.mode === 'preview'), `${route}: aviso de prévia incorreto para o ambiente.`);
   verify(!/Lorem ipsum|PLACEHOLDER|SUBSTITUIR|aprovação garantida|crédito para todos/i.test(html.replace(/<[^>]*>/g, ' ')), `${route}: texto demonstrativo ou promessa não confirmada.`);
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
   verify(ids.length === new Set(ids).size, `${route}: IDs duplicados.`);
@@ -90,8 +91,14 @@ for (const item of confirmedProducts(catalog)) {
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
 verify((sitemap.match(/<loc>/g) || []).length === (info.mode === 'preview' ? 0 : 7), 'Quantidade de URLs incorreta no sitemap.');
 verify(!sitemap.includes('/404.html'), '404 não pode estar no sitemap.');
+if (info.mode === 'production') {
+  const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
+  verify(new Set(sitemapUrls).size === 7 && info.routes.filter(route => route !== '/404.html').every(route => sitemapUrls.includes(config.domain + route)), 'Sitemap deve listar todas as páginas canônicas sem duplicação.');
+}
 const headers = await readFile(path.join(dist, '_headers'), 'utf8');
 verify(headers.includes('Content-Security-Policy:') && headers.includes("form-action 'none'"), 'Cabeçalhos de segurança ausentes.');
+const globalHeaders = headers.split('/404.html')[0];
+verify(/X-Robots-Tag: noindex/.test(globalHeaders) === (info.mode === 'preview'), 'Cabeçalho global não corresponde ao modo de indexação.');
 verify(!/^https?:\/\//m.test(await readFile(path.join(dist, '_redirects'), 'utf8')), 'Pages não aceita redirecionamento por domínio no _redirects.');
 const robots = await readFile(path.join(dist, 'robots.txt'), 'utf8');
 verify(robots.includes('Allow: /'), 'Robots deve permitir leitura das diretivas de indexação.');

@@ -1,6 +1,6 @@
 // Edite os dados reais aqui. Nunca coloque senhas, tokens ou dados de clientes.
 export default {
-  mode: 'preview', // Trocar para production somente após npm run check:release passar.
+  mode: 'production', // Publicação e indexação autorizadas por Celso em 12/09/2026.
   brand: 'Cestas Populares',
   domain: 'https://cestaspopulares.com.br',
   productionBranch: 'main',

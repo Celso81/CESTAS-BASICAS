@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import config from '../src/config.mjs';
-import { whatsappUrl, whatsappMessage, catalogIssues, releaseIssues, resolveMode } from '../src/lib.mjs';
+import { whatsappUrl, whatsappMessage, catalogIssues, releaseIssues, commercialIssues, resolveMode } from '../src/lib.mjs';
 import { contactButton, catalogCards, inquiry, paymentDetails } from '../src/components.mjs';
 import { browserAssets } from '../src/assets.mjs';
 
@@ -35,10 +35,19 @@ test('Modalidades de crédito só aparecem quando ativadas com regras', () => {
   assert.match(paymentDetails(modified), /Cesta básica parcelada/);
 });
 
-test('Dados incompletos bloqueiam produção e previews Cloudflare nunca viram produção', () => {
-  const issues = releaseIssues(config, []);
+test('Site sob consulta pode ser publicado e a conferência comercial permanece separada', () => {
+  assert.deepEqual(releaseIssues(config, []), []);
+  const issues = commercialIssues(config, []);
   assert.ok(issues.length > 0);
   assert.ok(issues.includes('Catálogo real confirmado'));
+});
+
+test('Publicação exige canonical e contato válidos; branches de prévia continuam protegidas', () => {
+  for (const domain of ['http://cestaspopulares.com.br', 'https://cestaspopulares.com.br/?teste=1', 'https://cestaspopulares.com.br/cestas/', 'https://localhost', 'inválido']) {
+    assert.ok(releaseIssues({ ...config, domain }, []).length);
+  }
+  assert.ok(releaseIssues({ ...config, whatsapp: '' }, []).length);
+  assert.ok(releaseIssues({ ...config, brand: ' ' }, []).length);
   assert.equal(resolveMode({ ...config, mode: 'production' }, { CF_PAGES: '1', CF_PAGES_BRANCH: 'ajuste' }, true), 'preview');
   assert.equal(resolveMode({ ...config, mode: 'production' }, { CF_PAGES: '1', CF_PAGES_BRANCH: 'main' }), 'production');
 });

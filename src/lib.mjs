@@ -21,6 +21,17 @@ export function catalogIssues(catalog) {
 }
 export function releaseIssues(config, catalog) {
   const issues = [];
+  if (!filled(config.brand)) issues.push('Nome do site');
+  if (!validWhatsapp(config.whatsapp)) issues.push('WhatsApp válido com código 55 e DDD');
+  try {
+    const domain = new URL(config.domain);
+    if (domain.protocol !== 'https:' || !domain.hostname.includes('.') || domain.username || domain.password || domain.search || domain.hash || config.domain !== domain.origin) throw new Error('Domínio inválido');
+  } catch { issues.push('Domínio HTTPS válido, sem caminho, parâmetros ou barra final'); }
+  return [...issues, ...catalogIssues(catalog)];
+}
+// A conferência comercial orienta o preenchimento futuro, sem bloquear o site sob consulta.
+export function commercialIssues(config, catalog) {
+  const issues = [];
   const require = (condition, label) => { if (!condition) issues.push(label); };
   require(validWhatsapp(config.whatsapp), 'WhatsApp válido com código 55 e DDD');
   require(config.business.responsible.trim(), 'Responsável comercial');
