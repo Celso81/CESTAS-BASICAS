@@ -83,6 +83,8 @@ npm test
 
 `/build-info.json` informa modo, rotas e o SHA do commit usado pelo Cloudflare Pages (`revision`). Em build local sem a variável `CF_PAGES_COMMIT_SHA`, a revisão é `null`. Use o SHA e o conteúdo publicado para conferir que o deploy esperado chegou ao domínio.
 
+O build gera CSS, aplicativo e módulo de contato com hash do conteúdo no nome. O HTML usa esses arquivos; o aplicativo importa o contato também versionado. Mudar o contato altera seu nome e o do aplicativo que o importa. Isso evita HTML atualizado combinado com JavaScript/CSS antigos ainda em cache. `/build-info.json` lista os três caminhos em `assets`, e `npm run check` valida os hashes, os links de todas as páginas e o import entre os módulos. As URLs originais `app.js`, `contact.mjs` e `styles.css` continuam disponíveis por compatibilidade com páginas da versão anterior.
+
 Configuração usada: **Workers & Pages → Create application → Pages → Connect to Git** (os rótulos podem variar), com acesso autorizado ao repositório `Celso81/CESTAS-BASICAS`.
 
 | Campo | Valor |

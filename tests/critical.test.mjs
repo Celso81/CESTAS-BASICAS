@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import config from '../src/config.mjs';
 import { whatsappUrl, whatsappMessage, catalogIssues, releaseIssues, resolveMode } from '../src/lib.mjs';
 import { contactButton, catalogCards, inquiry, paymentDetails } from '../src/components.mjs';
+import { browserAssets } from '../src/assets.mjs';
 
 test('WhatsApp preserva acentos, espaços e dados reais preenchidos sem campos inventados', () => {
   const url = new URL(whatsappUrl(config.whatsapp, { basket: 'Feijão & arroz', city: 'São Lourenço da Mata', neighborhood: ' Centro ' }));
@@ -69,4 +70,20 @@ test('Consulta não apresenta produto indisponível e mantém contato direto sem
   assert.match(html, /As sugestões não confirmam cobertura/);
   assert.match(html, /name="quantity" type="number" min="1"/);
   assert.match(html, new RegExp(`href="https://wa.me/${config.whatsapp}`));
+});
+
+test('Mudança do módulo de contato invalida também o cache do aplicativo que o importa', () => {
+  const source = { styles: 'body { color: green; }', app: "import { message } from './contact.mjs'; message();", contact: "export const message = () => 'consulta anterior';" };
+  const previous = browserAssets(source);
+  const next = browserAssets({ ...source, contact: "export const message = () => 'consulta com quantidade';" });
+  assert.notEqual(next.contact.path, previous.contact.path);
+  assert.notEqual(next.app.path, previous.app.path);
+  assert.equal(next.styles.path, previous.styles.path);
+  assert.ok(next.app.source.includes(next.contact.path.split('/').at(-1)));
+  assert.ok(!next.app.source.includes(previous.contact.path.split('/').at(-1)));
+  assert.deepEqual(browserAssets(source), previous);
+  const styleChange = browserAssets({ ...source, styles: 'body { color: blue; }' });
+  assert.notEqual(styleChange.styles.path, previous.styles.path);
+  assert.equal(styleChange.app.path, previous.app.path);
+  assert.throws(() => browserAssets({ ...source, app: "import './other.mjs';" }), /exatamente uma vez/);
 });

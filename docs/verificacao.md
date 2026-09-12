@@ -20,3 +20,9 @@ As verificações locais não comprovam entrega comercial, ranqueamento no Googl
 - O catálogo vazio é identificado explicitamente. A validação recusa produtos confirmados com campos vazios, itens incompletos, disponibilidade desconhecida, preço não finito, ID duplicado ou caminho de imagem inválido. O formulário não oferece produtos marcados indisponíveis.
 - `npm run check:release` e `npm run build:production` seguem bloqueados pelas mesmas 14 pendências comerciais. Não houve liberação de noindex ou adição de URLs ao sitemap.
 - A alteração do formulário requer conferência visual própria; a rodada anterior de 24 combinações registrada acima não comprova o novo layout. A publicação e a conferência HTTP desta rodada são registradas separadamente.
+
+## Correção do cache encontrada na revisão visual — 12/09/2026
+
+A rodada central de navegador encontrou o novo formulário sem atualizar a prévia da mensagem. A conferência HTTP mostrou HTML com `max-age=0, must-revalidate`, enquanto os endereços fixos de app.js e styles.css podiam ficar 14.400 segundos em cache e contact.mjs 3.600 segundos. O conteúdo novo obtido por HTTP isolado não comprovava qual JavaScript o navegador reutilizava.
+
+O gerador passou a publicar nomes com hash para CSS, aplicativo e módulo de contato. O aplicativo importa o contato pelo nome versionado e inclui essa referência em seu próprio hash. A verificação estática confere essa cadeia em todas as páginas. O teste de regressão altera somente o módulo de contato e exige que a URL do aplicativo também mude; o cache de CSS é independente. Nove testes críticos passam. A rodada de navegador da tarefa principal deve confirmar a prévia com cidade, bairro e quantidade após o deploy.

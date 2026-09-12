@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import config from '../src/config.mjs';
 import { confirmedProducts, validWhatsapp } from '../src/lib.mjs';
 import { scriptHash } from '../src/seo.mjs';
+import { contentHash } from '../src/assets.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const errors = [];
@@ -14,6 +15,18 @@ const generated = await files(dist);
 const info = JSON.parse(await readFile(path.join(dist, 'build-info.json'), 'utf8'));
 const catalog = JSON.parse(await readFile(path.join(root, 'src/data/catalog.json'), 'utf8'));
 const expectedHeaders = await readFile(path.join(dist, '_headers'), 'utf8');
+const assetPaths = info.assets || {};
+for (const [name, extension] of [['styles', 'css'], ['app', 'js'], ['contact', 'mjs']]) {
+  const assetPath = assetPaths[name];
+  verify(typeof assetPath === 'string' && new RegExp(`^/assets/${name}\\.[a-f0-9]{16}\\.${extension}$`).test(assetPath), `${name}: caminho versionado ausente ou inválido.`);
+  if (assetPath) {
+    try {
+      const source = await readFile(path.join(dist, assetPath), 'utf8');
+      verify(assetPath === `/assets/${name}.${contentHash(source)}.${extension}`, `${name}: hash não corresponde ao arquivo publicado.`);
+      if (name === 'app') verify(source.includes(`'./${assetPaths.contact?.split('/').at(-1)}'`) && !source.includes("'./contact.mjs'"), 'Aplicativo deve importar a versão correspondente do módulo de contato.');
+    } catch { errors.push(`${name}: arquivo versionado não encontrado.`); }
+  }
+}
 const titles = new Set(); const descriptions = new Set();
 verify(info.routes.length === 8, 'Devem existir as oito páginas solicitadas.');
 verify(generated.filter(file => file.endsWith('.html')).length === 8, 'Arquivos HTML inesperados ou ausentes.');
@@ -27,6 +40,7 @@ for (const route of info.routes) {
   verify((html.match(/<h1[ >]/g) || []).length === 1, `${route}: precisa de exatamente um h1.`);
   verify(html.includes(`rel="canonical" href="${config.domain}${route}"`), `${route}: canonical incorreto.`);
   verify(html.includes('<html lang="pt-BR">') && html.includes('<main id="conteudo"'), `${route}: estrutura semântica ausente.`);
+  verify(html.includes(`rel="stylesheet" href="${assetPaths.styles}"`) && html.includes(`type="module" src="${assetPaths.app}"`), `${route}: CSS/JS devem usar os arquivos versionados do build.`);
   const jsonld = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)?.[1];
   if (route !== '/404.html') {
     verify(Boolean(jsonld), `${route}: dados estruturados ausentes.`);
