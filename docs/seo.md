@@ -1,17 +1,39 @@
-# SEO da primeira versão
+# SEO e conteúdo — expansão de 12/09/2026
 
-O foco da inicial é **cestas básicas em Recife e Região Metropolitana**. O catálogo responde sobre opções/composição; como comprar explica a consulta e confirmação; entregas detalha cobertura, frete e prazo; contato apresenta o canal real. As páginas informativas apoiam transparência e confiança. As 14 cidades da RMR e Vitória de Santo Antão aparecem no HTML da inicial e da página de entregas, com cobertura sujeita a confirmação.
+Celso pediu a ampliação da primeira versão, com uma página por cidade e tutoriais de compra e venda. O site passa a ter **30 páginas indexáveis e uma 404**: sete páginas originais, dois diretórios, 15 páginas locais e seis guias. A limitação de oito páginas do briefing inicial foi substituída por esse pedido; os cuidados com veracidade e conteúdo próprio continuam.
 
-Implementado: HTML legível sem JavaScript, título/descrição próprios por URL, um H1 por página, URLs curtas, canonical HTTPS, navegação interna, metadados de compartilhamento, JSON-LD WebSite e BreadcrumbList com dados reais, imagens WebP responsivas, dimensões explícitas, carregamento prioritário da imagem principal, sitemap por ambiente, 404 real e proteção da indexação em prévias.
+## Organização e intenção
 
-Não há produtos, preços, estrelas, endereços ou filiais inventados nos dados estruturados. A lista de cidades não confirma entrega. Modalidades de crédito dependem da configuração real do negócio. Os textos foram escritos para esclarecer a compra; não foram geradas páginas repetidas por cidade.
+| Conjunto | Função |
+|---|---|
+| `/` | Apresentação regional da marca e acesso a cestas, cidades e guias. |
+| `/cestas-basicas/`, `/como-comprar/`, `/entregas/`, `/contato/` | Consulta comercial: composição, compra, entrega e canal real. |
+| `/cidades/` | Diretório navegável dos 14 municípios da RMR, com Vitória de Santo Antão em seção adicional. |
+| `/cidades/<cidade>/` | Orientação local, referências de endereço, roteiro de compra, dúvidas e consulta contextualizada. |
+| `/guias/` | Entrada para os seis tutoriais. |
+| `/guias/<assunto>/` | Montagem da cesta, conferência de alimentos, comparação de orçamento, venda, compra coletiva e carnes/refrigerantes. |
+| Páginas informativas | Privacidade e condições de compra, com dados pendentes apresentados como tais. |
 
-Publicação normal autorizada por Celso em 12/09/2026: `mode: production`, sete páginas com `index, follow`, sem faixa de prévia nem cabeçalho global noindex. O sitemap lista as sete URLs HTTPS canônicas e `robots.txt` aponta para `https://cestaspopulares.com.br/sitemap.xml`. A 404 continua noindex; branches de prévia da Cloudflare continuam protegidas. A conferência comercial foi separada da validação de publicação, mantendo dados não confirmados sob consulta.
+## Conteúdo municipal
 
-Próxima etapa no Google Search Console, combinada para 13/09/2026: verificar a propriedade do domínio, enviar o sitemap e inspecionar as URLs prioritárias para solicitar indexação. O site pode ser rastreado desde a publicação normal; o envio ao Search Console ainda precisa ser executado e conferido.
+Os textos ficam em `src/data/cities.mjs`. Cada página tem introdução, referência local com fonte oficial, orientação aplicada àquela consulta, roteiro de compra e dúvidas próprios. Exemplos: etapas de Rio Doce em Olinda, identificação completa de Maranguape em Paulista, distinção entre Cruz de Rebouças e Nova Cruz em Igarassu, sede e Bonança em Moreno e consulta separada para Vitória. As orientações de compra são editoriais; as fontes governamentais sustentam apenas as referências territoriais.
 
-A qualidade do catálogo, informações completas do negócio, conteúdo útil e referências reais ao site continuam relevantes depois de publicar. A estrutura técnica prepara o site para ser compreendido e indexado; não garante posição, prazo ou volume de tráfego.
+O formulário já contém a cidade, editável pelo visitante. A mensagem preparada e o link direto sem JavaScript mantêm o contexto. Não há cadastro, envio automático ou armazenamento dos campos. Links de cidades aparecem no conteúdo da inicial/entregas, no diretório e entre páginas relacionadas. Guias são acessíveis pela inicial, pelo menu, pelo rodapé e pelas páginas locais.
 
-Revisão de 12/09/2026 após a auditoria: a página de cestas explica a ausência do catálogo confirmado e prepara um pedido de orçamento com composição, quantidades, frete e total. As páginas de contato e entrega compartilham esse fluxo. Nenhum produto, valor ou área de entrega foi acrescentado sem confirmação. A autorização posterior de Celso liberou a publicação normal deste conteúdo sob consulta, substituindo a decisão anterior de manter o site inteiro noindex.
+A fonte geográfica não representa filial, ponto de retirada, contrato público ou cobertura de entrega. `delivery.confirmedCities` continua vazio. Fontes de cada localidade estão junto do conteúdo e na estrutura de dados; todas foram consultadas em 12/09/2026. As direções norte/oeste/sul no diretório são agrupamentos editoriais de navegação, não uma divisão administrativa oficial.
 
-Fontes consultadas em 12/09/2026: [Guia de SEO do Google](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=pt-br), [navegação estruturada](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb?hl=pt-br) e [controle de indexação](https://developers.google.com/search/docs/crawling-indexing/block-indexing?hl=pt-br).
+## Guias
+
+Os seis tutoriais estão em `src/data/guides.mjs`, com sumário por âncoras, passos acionáveis, exemplos e links relacionados. O tutorial de venda aborda público, fornecedor, composição, custos, estrutura, divulgação e conferência. Não anuncia programa de revendedores, tabela de atacado ou parceria. Valores de exemplos são identificados como fictícios, não ofertas da Cestas Populares. Referências de conservação: Anvisa; formação de preços: Sebrae, citados junto das orientações correspondentes.
+
+## Indexação e validação
+
+Produção autorizada: `index, follow` nas 30 páginas, canonical próprio HTTPS, títulos/descrições únicos, um H1 por página, HTML legível sem JavaScript e sitemap completo. `robots.txt` referencia o sitemap. A 404 e branches de prévia permanecem sem indexação. A hierarquia dos breadcrumbs das cidades/guias tem três níveis, tanto na página quanto no JSON-LD.
+
+Não há marcação de avaliações, ofertas, preços, filiais ou endereço comercial inventados. WebSite e BreadcrumbList são usados somente com informações existentes. Assets permanecem versionados e leves, sem bibliotecas de produção adicionadas.
+
+`npm run check` valida inventário completo, sitemap, metadados, links/âncoras, IDs, imagens, arquivos e hashes da política de scripts. Verifica também o limite de 2.000 caracteres por linha de `_headers`. Os 12 testes cobrem comportamentos críticos, incluindo cidade no formulário/fallback, escape de conteúdo e navegação até as páginas novas.
+
+Próxima sessão combinada: **13/09/2026, Google Search Console**. Revalidar a propriedade, enviar o sitemap ampliado e solicitar indexação das URLs prioritárias dentro dos limites disponíveis. Publicação e rastreabilidade não demonstram indexação, posição ou tráfego; acompanhar resultados reais depois do envio.
+
+A quantidade de páginas, isoladamente, não garante melhora. O conteúdo foi organizado para uso direto e navegação clara, seguindo a distinção do Google entre conteúdo útil e páginas semelhantes criadas só para alcançar consultas: [políticas de spam, doorways e conteúdo em escala](https://developers.google.com/search/docs/essentials/spam-policies?hl=pt-br). Outras referências: [breadcrumbs](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb?hl=pt-br), [controle de indexação](https://developers.google.com/search/docs/crawling-indexing/block-indexing?hl=pt-br) e [limites de headers do Cloudflare Pages](https://developers.cloudflare.com/pages/configuration/headers/).

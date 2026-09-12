@@ -26,3 +26,12 @@ As verificações locais não comprovam entrega comercial, ranqueamento no Googl
 A rodada central de navegador encontrou o novo formulário sem atualizar a prévia da mensagem. A conferência HTTP mostrou HTML com `max-age=0, must-revalidate`, enquanto os endereços fixos de app.js e styles.css podiam ficar 14.400 segundos em cache e contact.mjs 3.600 segundos. O conteúdo novo obtido por HTTP isolado não comprovava qual JavaScript o navegador reutilizava.
 
 O gerador passou a publicar nomes com hash para CSS, aplicativo e módulo de contato. O aplicativo importa o contato pelo nome versionado e inclui essa referência em seu próprio hash. A verificação estática confere essa cadeia em todas as páginas. O teste de regressão altera somente o módulo de contato e exige que a URL do aplicativo também mude; o cache de CSS é independente. Nove testes críticos passam. A rodada de navegador da tarefa principal deve confirmar a prévia com cidade, bairro e quantidade após o deploy.
+
+## Ampliação de cidades e guias — 12/09/2026
+
+- Build de produção, check das 31 páginas e 12 testes críticos aprovados. Sitemap com 30 URLs; 404 excluída. Títulos e descrições próprios, canonical, links/âncoras e hashes de assets/CSP verificados. `git diff --check` sem erros.
+- Navegador local: inicial, diretório de cidades, página do Cabo de Santo Agostinho, diretório de guias, comparação de preços e tutorial de venda nas larguras 390, 768 e 1440 px (18 combinações); nenhuma rolagem horizontal indevida ou imagem quebrada e um H1 em cada página.
+- Olinda em 390 px: consulta já preenchida com a cidade; bairro `Rio Doce, 4ª etapa` e quantidade 3 apareceram corretamente na mensagem revisável. Nenhuma mensagem foi enviada. Menu móvel abriu, navegou para Cidades e fechou; diretório apresentou 15 links locais.
+- Tutorial existente `/como-comprar/` ampliado com cinco etapas detalhadas; verificado em 390 px sem overflow. Guias mantêm a leitura sem dependência de JavaScript; os testes cobrem contato direto da cidade e escape de conteúdo.
+- Inspeção visual das novas páginas preservou tipografia, verde/creme/amarelo e navegação do site. Fontes territoriais e referências de Anvisa/Sebrae estão visíveis junto do conteúdo pertinente. A conferência das novas páginas não representa entrega real nem recebimento de mensagem pelo WhatsApp.
+- Evidência da publicação desta expansão: `output/qa/seo-expansion-20260912.json`, após validação do domínio; SHA e confirmação final no Segundo Cérebro. Os registros mais antigos deste documento referem-se à versão que existia em cada etapa.

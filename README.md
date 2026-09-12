@@ -1,6 +1,6 @@
 # Cestas Populares
 
-Site estático com oito páginas, HTML gerado e JavaScript leve, sem dependências de produção. Projeto independente para venda de cestas básicas. Domínio: **https://cestaspopulares.com.br**. Repositório: **https://github.com/Celso81/CESTAS-BASICAS**.
+Site estático com 30 páginas de conteúdo e uma página 404, HTML gerado e JavaScript leve, sem dependências de produção. Projeto independente para venda de cestas básicas. Domínio: **https://cestaspopulares.com.br**. Repositório: **https://github.com/Celso81/CESTAS-BASICAS**.
 
 ## Abrir e conferir
 
@@ -19,13 +19,16 @@ npm test
 npm run check:release
 ```
 
-`check` verifica as oito páginas, links, imagens, WhatsApp, metadados, indexação, sitemap, 404 e sintaxe. `test` confere os comportamentos críticos de contato e proteção comercial. `check:release` valida nome, domínio, WhatsApp e produtos publicados. `check:commercial` lista separadamente os dados comerciais a completar; seu resultado não bloqueia a publicação do site sob consulta.
+`check` verifica todas as 31 páginas, links, imagens, WhatsApp, metadados, indexação, sitemap, 404 e sintaxe. `test` confere os comportamentos críticos de contato e proteção comercial. `check:release` valida nome, domínio, WhatsApp e produtos publicados. `check:commercial` lista separadamente os dados comerciais a completar; seu resultado não bloqueia a publicação do site sob consulta.
 
 ## Editar o negócio
 
 - **`src/config.mjs`**: marca, domínio, WhatsApp, contato, horário, responsável, identificação da empresa, privacidade, cidades, frete, prazo, pagamento e modo.
 - **`src/data/catalog.json`**: catálogo real. Começa vazio; o site informa que o catálogo está em confirmação e permite pedir composição e orçamento sem inventar produtos. Até três cestas aparecem na inicial. A página de cestas mostra todo o catálogo confirmado.
 - **`src/pages.mjs` / `src/inner-pages.mjs`**: textos e páginas.
+- **`src/data/cities.mjs`**: 15 cidades com referências locais, roteiro de compra, dúvidas e links úteis. Não representa cobertura confirmada.
+- **`src/data/guides.mjs`**: seis guias práticos de compra, composição, orçamento, compra coletiva e venda de cestas.
+- **`src/editorial-pages.mjs`**: páginas locais e guias; `src/site.mjs` reúne as rotas usadas no build e na verificação.
 - **`src/components.mjs`**: cabeçalho, rodapé, catálogo e contato compartilhados.
 - **`public/assets/`**: imagens, marca, CSS e JavaScript. O build copia para `dist/assets/`.
 
@@ -63,9 +66,9 @@ Modalidades como parcelamento, compra sem cartão, crediário, fiado, boleto e d
 
 Estado atual: **produção**, com publicação normal e indexação autorizadas por Celso em 12/09/2026. WhatsApp confirmado **(81) 99771-6247**, catálogo vazio e cobertura sob consulta. Os links abrem o WhatsApp apenas após ação do visitante. Não há mensagem automática, coleta em banco de dados ou pedido automático.
 
-Catálogo, entregas e contato permitem preparar uma consulta com cidade, bairro e quantidade opcional de 1 a 999 cestas. As sugestões de cidades não afirmam cobertura. O visitante pode conferir a mensagem antes de abrir o WhatsApp; ela pede alimentos, marcas, tamanhos, quantidades, disponibilidade, preço, frete, prazo, total e pagamento. Sem JavaScript, o link direto continua disponível com o mesmo roteiro. Nada é enviado ao atendimento pelo site.
+Páginas de cidades, catálogo, entregas e contato permitem preparar uma consulta com cidade, bairro e quantidade opcional de 1 a 999 cestas. As sugestões de cidades não afirmam cobertura. O visitante pode conferir a mensagem antes de abrir o WhatsApp; ela pede alimentos, marcas, tamanhos, quantidades, disponibilidade, preço, frete, prazo, total e pagamento. Sem JavaScript, o link direto continua disponível com o mesmo roteiro. Nada é enviado ao atendimento pelo site.
 
-O domínio principal usa `index, follow` nas sete páginas de conteúdo, sem faixa de prévia nem bloqueio global por `X-Robots-Tag`. O sitemap contém as sete URLs canônicas HTTPS e está declarado em `robots.txt`. A 404 continua sem indexação. Deploys Cloudflare em branches diferentes de `main` continuam em prévia: `noindex, nofollow`, sitemap vazio e robots permitindo a leitura do bloqueio. Isso não é controle de acesso.
+O domínio principal usa `index, follow` nas 30 páginas de conteúdo, sem faixa de prévia nem bloqueio global por `X-Robots-Tag`. O sitemap contém as 30 URLs canônicas HTTPS e está declarado em `robots.txt`. A 404 continua sem indexação. Deploys Cloudflare em branches diferentes de `main` continuam em prévia: `noindex, nofollow`, sitemap vazio e robots permitindo a leitura do bloqueio. Isso não é controle de acesso.
 
 Para publicar alterações, mantenha `mode: 'production'` e execute os comandos abaixo. Use `npm run check:commercial` para acompanhar o preenchimento de identificação comercial, catálogo, entregas, pagamento, privacidade e condições de compra. Não marque esses dados como confirmados sem os valores reais.
 
@@ -110,3 +113,9 @@ Use a integração Git desde a criação para publicar automaticamente novos com
 7. Confira `robots.txt`, `sitemap.xml`, cabeçalhos e meta robots na versão final; só então envie o sitemap para o Search Console. Não use a prévia para solicitar indexação. Se a Cloudflare administrar seu robots.txt, confira o conteúdo efetivamente servido.
 
 Nenhum destino `pages.dev`, nameserver, DNS ou publicação é presumido. A preparação local e a verificação do site não comprovam domínio publicado.
+
+## Expansão regional e guias — 12/09/2026
+
+Autorizada por Celso após a primeira versão. `/cidades/` reúne as 14 cidades da RMR e Vitória de Santo Antão separadamente, em `/cidades/<cidade>/`. `/guias/` reúne seis tutoriais em `/guias/<assunto>/`. Cada cidade tem conteúdo próprio e fonte oficial de localização, formulário com a cidade preenchida e contato direto com o mesmo contexto. Há navegação entre conteúdo, cidades e páginas comerciais, além de breadcrumbs visíveis e estruturados. O sitemap contém 30 URLs, sem a 404.
+
+O tutorial de venda é educativo: não cria cadastro, tabela de atacado, programa de revendedores ou parceria. Exemplos de valores nos guias são explicitamente fictícios e não integram catálogo ou dados de oferta. Ver [docs/seo.md](docs/seo.md).

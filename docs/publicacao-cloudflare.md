@@ -9,7 +9,7 @@
 - Integração Git autorizada por Celso. Commits em `main` disparam build e publicação.
 - Framework **None**, raiz do repositório, saída **dist**, variável **NODE_VERSION=22**.
 - Build: `npm run build && npm run check && npm test`; concluído com sucesso pela Cloudflare.
-- Celso autorizou a **publicação normal** em 12/09/2026: modo production, sete páginas liberadas para indexação e sitemap completo. Catálogo e condições desconhecidas continuam sob consulta, sem marcar dados comerciais como confirmados.
+- Celso autorizou a **publicação normal** em 12/09/2026: modo production, páginas liberadas para indexação e sitemap completo. Catálogo e condições desconhecidas continuam sob consulta, sem marcar dados comerciais como confirmados.
 
 ## Domínio próprio ativo
 
@@ -29,10 +29,14 @@ Em `cestas-populares.pages.dev` e `cestaspopulares.com.br`: sete páginas de con
 
 A Cloudflare inseriu automaticamente seu beacon de RUM no domínio próprio. A coleta foi desativada em **Speed → Real user monitoring → Disable completely → Disable RUM**, para manter a política de privacidade prevista. A conferência de HTML usa `Accept: text/html`, pois a injeção pode não aparecer sem esse cabeçalho. A Cloudflare acrescenta seu bloco gerenciado ao `robots.txt`, preservando as diretivas do projeto.
 
-Após a autorização de publicação normal, o build remove o bloqueio global `X-Robots-Tag: noindex, nofollow`; as sete páginas têm `index, follow`, e o sitemap lista todas as URLs canônicas de conteúdo. A 404 permanece noindex. CSP e cabeçalhos de proteção do projeto são preservados.
+Após a autorização de publicação normal, o build remove o bloqueio global `X-Robots-Tag: noindex, nofollow`; as páginas de conteúdo têm `index, follow`, e o sitemap lista todas as URLs canônicas de conteúdo. A 404 permanece noindex. CSP e cabeçalhos de proteção do projeto são preservados.
 
 ## Próxima etapa: Google Search Console
 
 Para 13/09/2026, Celso combinou verificar a propriedade, enviar o sitemap e solicitar indexação das URLs prioritárias. `npm run check:release` valida a publicação; `npm run check:commercial` mantém o relatório separado dos dados de negócio a completar. A publicação não inventa nem aprova esses dados.
 
 Não solicitar indexação da prévia no Google. Publicação, indexação, posições e operação comercial são verificações distintas.
+
+## Expansão de conteúdo — 12/09/2026
+
+Nova estrutura de 31 páginas: sete páginas originais, 15 páginas municipais, dois diretórios (cidades e guias), seis guias e 404. Produção mantém 30 URLs indexáveis no sitemap. Build/check e 12 testes aprovados localmente, incluindo contexto da cidade no WhatsApp, navegação até todas as páginas locais/editoriais e hierarquia dos breadcrumbs. A maior linha de `_headers` tem 1.853 caracteres, abaixo do limite de 2.000 do Pages; check passa a impedir exceder o limite. A confirmação do commit publicado fica registrada no Segundo Cérebro e em `output/qa/`.

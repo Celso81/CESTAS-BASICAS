@@ -4,6 +4,9 @@ import config from '../src/config.mjs';
 import { whatsappUrl, whatsappMessage, catalogIssues, releaseIssues, commercialIssues, resolveMode } from '../src/lib.mjs';
 import { contactButton, catalogCards, inquiry, paymentDetails } from '../src/components.mjs';
 import { browserAssets } from '../src/assets.mjs';
+import { cities, cityPath } from '../src/data/cities.mjs';
+import { sitePages } from '../src/site.mjs';
+import { structuredData } from '../src/seo.mjs';
 
 test('WhatsApp preserva acentos, espaços e dados reais preenchidos sem campos inventados', () => {
   const url = new URL(whatsappUrl(config.whatsapp, { basket: 'Feijão & arroz', city: 'São Lourenço da Mata', neighborhood: ' Centro ' }));
@@ -79,6 +82,43 @@ test('Consulta não apresenta produto indisponível e mantém contato direto sem
   assert.match(html, /As sugestões não confirmam cobertura/);
   assert.match(html, /name="quantity" type="number" min="1"/);
   assert.match(html, new RegExp(`href="https://wa.me/${config.whatsapp}`));
+});
+
+test('Cidade preenchida preserva acentos no formulário e no contato sem JavaScript', () => {
+  const city = 'São Lourenço da Mata';
+  const html = inquiry(config, [], 'a entrega', { city });
+  assert.match(html, /name="city"[^>]+value="São Lourenço da Mata"/);
+  const link = html.match(/href="(https:\/\/wa.me\/[^\"]+)"/)[1].replaceAll('&amp;', '&');
+  assert.match(new URL(link).searchParams.get('text'), /Minha cidade é São Lourenço da Mata\./);
+  const escaped = inquiry(config, [], '', { city: '\"><script>teste</script>' });
+  assert.doesNotMatch(escaped, /<script>teste/);
+  assert.match(escaped, /&quot;&gt;&lt;script&gt;/);
+  assert.match(inquiry(config, []), /name="city"[^>]+value=""/);
+});
+
+test('Todas as cidades configuradas têm página própria e caminho de navegação até a página principal', () => {
+  assert.deepEqual(cities.filter(city => !city.additional).map(city => city.name).sort(), [...config.delivery.plannedCities].sort());
+  assert.deepEqual(cities.filter(city => city.additional).map(city => city.name), config.delivery.additionalPlannedCities);
+  const all = sitePages(config, []);
+  const byPath = new Map(all.map(page => [page.path, page]));
+  assert.equal(byPath.size, all.length);
+  for (const city of cities) {
+    const page = byPath.get(cityPath(city.slug));
+    assert.ok(page);
+    const crumbs = JSON.parse(structuredData(config, page))['@graph'].find(item => item['@type'] === 'BreadcrumbList').itemListElement;
+    assert.deepEqual(crumbs.map(item => item.item), [config.domain + '/', config.domain + '/cidades/', config.domain + cityPath(city.slug)]);
+    assert.match(page.body, /Atendimento sob consulta/);
+    assert.ok(page.body.includes(`value="${city.name}"`));
+    assert.ok(page.body.includes(city.source.url));
+  }
+  const visited = new Set(['/']); const queue = ['/'];
+  while (queue.length) {
+    for (const [, ref] of byPath.get(queue.shift()).body.matchAll(/href="(\/[^\"]*)"/g)) {
+      const path = new URL(ref, config.domain).pathname;
+      if (byPath.has(path) && !visited.has(path)) { visited.add(path); queue.push(path); }
+    }
+  }
+  for (const page of all.filter(page => page.parent)) assert.ok(visited.has(page.path), `Página sem caminho navegável: ${page.path}`);
 });
 
 test('Mudança do módulo de contato invalida também o cache do aplicativo que o importa', () => {

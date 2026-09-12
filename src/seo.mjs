@@ -13,7 +13,8 @@ export function structuredData(config, page) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: config.brand, item: `${config.domain}/` },
-      { '@type': 'ListItem', position: 2, name: page.title, item: config.domain + page.path }
+      ...(page.parent ? [{ '@type': 'ListItem', position: 2, name: page.parent.title, item: config.domain + page.parent.path }] : []),
+      { '@type': 'ListItem', position: page.parent ? 3 : 2, name: page.title, item: config.domain + page.path }
     ]
   });
   // JSON-LD contém apenas marca, endereço do site e navegação reais.

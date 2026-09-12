@@ -6,6 +6,7 @@ import config from '../src/config.mjs';
 import { confirmedProducts, validWhatsapp } from '../src/lib.mjs';
 import { scriptHash } from '../src/seo.mjs';
 import { contentHash } from '../src/assets.mjs';
+import { sitePages } from '../src/site.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const errors = [];
@@ -28,8 +29,9 @@ for (const [name, extension] of [['styles', 'css'], ['app', 'js'], ['contact', '
   }
 }
 const titles = new Set(); const descriptions = new Set();
-verify(info.routes.length === 8, 'Devem existir as oito páginas solicitadas.');
-verify(generated.filter(file => file.endsWith('.html')).length === 8, 'Arquivos HTML inesperados ou ausentes.');
+const expectedRoutes = sitePages(config, catalog).map(page => page.path);
+verify(new Set(info.routes).size === expectedRoutes.length && expectedRoutes.every(route => info.routes.includes(route)), 'Inventário de páginas incorreto.');
+verify(generated.filter(file => file.endsWith('.html')).length === expectedRoutes.length, 'Arquivos HTML inesperados ou ausentes.');
 for (const route of info.routes) {
   const file = path.join(dist, route.endsWith('.html') ? route : `${route}/index.html`);
   const html = await readFile(file, 'utf8');
@@ -52,7 +54,7 @@ for (const route of info.routes) {
     }
   }
   if (route === '/' || route === '/entregas/') {
-    for (const city of [...config.delivery.plannedCities, ...config.delivery.additionalPlannedCities]) verify(html.includes(`<li>${city}</li>`) || html.includes(`<strong>${city}</strong>`), `${route}: cidade não citada no conteúdo visível: ${city}`);
+    for (const city of [...config.delivery.plannedCities, ...config.delivery.additionalPlannedCities]) verify(html.includes(`<li>${city}</li>`) || html.includes(`<strong>${city}</strong>`) || html.includes(`>${city}</a>`), `${route}: cidade não citada no conteúdo visível: ${city}`);
   }
   const shouldNoindex = info.mode === 'preview' || route === '/404.html';
   verify(html.includes(`name="robots" content="${shouldNoindex ? 'noindex, nofollow' : 'index, follow'}"`), `${route}: indexação incorreta.`);
@@ -89,13 +91,14 @@ for (const item of confirmedProducts(catalog)) {
   if (item.image) verify(item.image.startsWith('/assets/') && !item.image.includes('..') && generated.includes(path.join(dist, item.image)), `${item.name}: imagem deve existir em public/assets/.`);
 }
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
-verify((sitemap.match(/<loc>/g) || []).length === (info.mode === 'preview' ? 0 : 7), 'Quantidade de URLs incorreta no sitemap.');
+verify((sitemap.match(/<loc>/g) || []).length === (info.mode === 'preview' ? 0 : expectedRoutes.length - 1), 'Quantidade de URLs incorreta no sitemap.');
 verify(!sitemap.includes('/404.html'), '404 não pode estar no sitemap.');
 if (info.mode === 'production') {
   const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-  verify(new Set(sitemapUrls).size === 7 && info.routes.filter(route => route !== '/404.html').every(route => sitemapUrls.includes(config.domain + route)), 'Sitemap deve listar todas as páginas canônicas sem duplicação.');
+  verify(new Set(sitemapUrls).size === expectedRoutes.length - 1 && info.routes.filter(route => route !== '/404.html').every(route => sitemapUrls.includes(config.domain + route)), 'Sitemap deve listar todas as páginas canônicas sem duplicação.');
 }
 const headers = await readFile(path.join(dist, '_headers'), 'utf8');
+verify(headers.split('\n').every(line => line.length <= 2000), 'Cabeçalho excede o limite de 2.000 caracteres por linha do Cloudflare Pages.');
 verify(headers.includes('Content-Security-Policy:') && headers.includes("form-action 'none'"), 'Cabeçalhos de segurança ausentes.');
 const globalHeaders = headers.split('/404.html')[0];
 verify(/X-Robots-Tag: noindex/.test(globalHeaders) === (info.mode === 'preview'), 'Cabeçalho global não corresponde ao modo de indexação.');

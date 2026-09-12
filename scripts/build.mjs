@@ -2,8 +2,7 @@ import { readFile, mkdir, writeFile, cp, lstat, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import config from '../src/config.mjs';
-import { pages } from '../src/pages.mjs';
-import { innerPages } from '../src/inner-pages.mjs';
+import { sitePages } from '../src/site.mjs';
 import { layout } from '../src/components.mjs';
 import { catalogIssues, releaseIssues, resolveMode } from '../src/lib.mjs';
 import { structuredData, scriptHash } from '../src/seo.mjs';
@@ -31,7 +30,8 @@ const assets = browserAssets({
   contact: await readFile(path.join(root, 'public/assets/contact.mjs'), 'utf8')
 });
 for (const asset of Object.values(assets)) await writeFile(path.join(dist, asset.path), asset.source);
-const allPages = [...pages(config, catalog), ...innerPages(config, catalog)];
+const allPages = sitePages(config, catalog);
+if (new Set(allPages.map(page => page.path)).size !== allPages.length) throw new Error('Rotas duplicadas no site.');
 const schemaHashes = [...new Set(allPages.map(page => structuredData(config, page)).filter(Boolean).map(scriptHash))].join(' ');
 for (const page of allPages) {
   const target = path.join(dist, page.path.endsWith('.html') ? page.path : `${page.path}/index.html`);
