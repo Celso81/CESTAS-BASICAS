@@ -75,7 +75,9 @@ npm test
 
 ## Cloudflare Pages com GitHub
 
-Quando for solicitada a publicação, conecte **este repositório** no painel Cloudflare em **Workers & Pages → Create application → Pages → Connect to Git** (os rótulos podem variar). Autorize o acesso ao repositório `Celso81/CESTAS-BASICAS`.
+**Publicado em 12/09/2026:** https://cestas-populares.pages.dev/. Projeto `cestas-populares` com integração Git; domínio próprio em ativação na Cloudflare. Estado, evidências e retomada em [docs/publicacao-cloudflare.md](docs/publicacao-cloudflare.md).
+
+Configuração usada: **Workers & Pages → Create application → Pages → Connect to Git** (os rótulos podem variar), com acesso autorizado ao repositório `Celso81/CESTAS-BASICAS`.
 
 | Campo | Valor |
 |---|---|
