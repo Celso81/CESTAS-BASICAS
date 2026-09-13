@@ -17,7 +17,18 @@ export function structuredData(config, page) {
       { '@type': 'ListItem', position: page.parent ? 3 : 2, name: page.title, item: config.domain + page.path }
     ]
   });
-  // JSON-LD contém apenas marca, endereço do site e navegação reais.
+  if (page.article) graph.push({
+    '@type': 'Article',
+    '@id': `${config.domain}${page.path}#artigo`,
+    mainEntityOfPage: `${config.domain}${page.path}`,
+    headline: page.title,
+    description: page.description,
+    inLanguage: 'pt-BR',
+    dateModified: page.article.modified,
+    author: { '@type': 'Organization', name: config.brand, url: `${config.domain}/contato/#editorial` },
+    citation: page.article.sources.map(source => source.url)
+  });
+  // Artigos refletem autoria da marca, data e referências visíveis; sem ofertas ou credenciais inventadas.
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
 }
 export const scriptHash = source => `'sha256-${createHash('sha256').update(source).digest('base64')}'`;
