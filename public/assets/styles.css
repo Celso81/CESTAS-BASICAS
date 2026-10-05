@@ -23,3 +23,6 @@
 @media(max-width:600px){.resource-grid,.city-directory{grid-template-columns:1fr}.resource-card{padding:26px}.editorial-hero h1{font-size:2.45rem;overflow-wrap:break-word}.breadcrumbs{font-size:.78rem;gap:6px 9px}.city-card{padding:22px}.local-consult .form-row{grid-template-columns:1fr}.guide-start{padding:25px;gap:18px}.guide-start>span{display:none}.guide-start>div{min-width:0;flex:auto}.guide-start .button{width:100%}.article-next{padding:25px}.coverage-note{padding:17px 19px}.table-scroll th,.table-scroll td{padding:12px}.directory-intro h2{font-size:1.8rem}}
 @media print{.site-header,.topline,.site-footer,.local-consult,.reading-toc,.article-next,.contact-section{display:none}.reading-layout,.local-layout{display:block}.section{padding:20px 0}.prose{max-width:none}.container{width:100%}a{color:inherit}.page-hero{padding:20px 0}.table-scroll{overflow:visible}html{scroll-behavior:auto}}
 .buying-tutorial{margin:55px auto 0;max-width:850px}.buying-tutorial>h2{line-height:1.2}.buying-tutorial .tutorial-steps li{margin-bottom:34px}
+
+/* Modelo copiável dos guias, compatível com a CSP de produção. */
+.planning-template{width:100%;box-sizing:border-box;max-width:100%;font:inherit;padding:12px;line-height:1.6;resize:vertical}
