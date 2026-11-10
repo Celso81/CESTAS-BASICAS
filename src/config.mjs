@@ -19,13 +19,14 @@ export default {
     notes: ''
   },
   payments: {
-    methods: [],
-    conditions: '',
-    installments: { enabled: false, details: '' },
-    noCard: { enabled: false, details: '' },
-    ownCredit: { enabled: false, details: '' },
+    // Confirmado por Celso em 10/11/2026: cesta no crediário sem entrada, igual à loja de móveis.
+    methods: ['À vista no Pix', 'Cartão', 'Crediário próprio, sem entrada'],
+    conditions: 'Os valores à vista, no cartão e no crediário são informados pelo WhatsApp, junto com a lista de itens. Confira o total antes de fechar.',
+    installments: { enabled: true, details: 'O parcelamento é combinado no atendimento, conforme o valor da compra. Peça o valor de cada parcela e o total a prazo por escrito.' },
+    noCard: { enabled: true, details: 'O crediário próprio não usa cartão de crédito.' },
+    ownCredit: { enabled: true, details: 'Sem entrada. O cadastro é feito em uma visita na sua casa, antes da entrega, com documento com foto e comprovante de endereço. Nome negativado não barra o cadastro, mas não há aprovação automática: a resposta sai depois da visita.' },
     fiado: { enabled: false, details: '' },
-    boleto: { enabled: false, details: '' },
+    boleto: { enabled: true, details: 'As parcelas do crediário são pagas no carnê, entregue com o contrato junto com a cesta. O vencimento é combinado perto do dia em que você recebe.' },
     noIncomeProof: { enabled: false, details: '' }
   },
   catalogConfirmed: false,

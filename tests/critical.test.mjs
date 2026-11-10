@@ -30,8 +30,10 @@ test('Catálogo oculta produtos não confirmados; produtos reais são escapados'
 });
 
 test('Modalidades de crédito só aparecem quando ativadas com regras', () => {
-  assert.doesNotMatch(paymentDetails(config), /Crediário próprio|Compra no fiado|Cesta básica parcelada/);
-  const modified = structuredClone(config);
+  const blank = structuredClone(config);
+  for (const key of ['installments', 'noCard', 'ownCredit', 'fiado', 'boleto', 'noIncomeProof']) blank.payments[key] = { enabled: false, details: '' };
+  assert.doesNotMatch(paymentDetails(blank), /<h3>Crediário próprio|Compra no fiado|Cesta básica parcelada/);
+  const modified = structuredClone(blank);
   modified.payments.installments.enabled = true;
   assert.doesNotMatch(paymentDetails(modified), /Cesta básica parcelada/);
   modified.payments.installments.details = 'Condições confirmadas para teste de apresentação.';
