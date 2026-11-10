@@ -152,7 +152,7 @@ export const cities = [
     taskTitle: 'Calcule uma lista para a duração da estadia',
     task: 'Separe o que será consumido no café, nas refeições e nos lanches, de acordo com a rotina do grupo. A cesta pode servir como base, mas é preciso comparar a lista oferecida com o que realmente será preparado. Se a viagem é curta, avalie embalagens que possam ser usadas no período.',
     steps: [['Localize o destino', 'Informe a localidade, o bairro e uma referência do imóvel.'], ['Confira o que falta', 'Considere os produtos já disponíveis na casa e as refeições que serão feitas fora.'], ['Peça o total final', 'Inclua entrega, possíveis complementos e condições de recebimento no mesmo orçamento.']],
-    faq: [['Atendem Porto de Galinhas e Serrambi?', 'As localidades podem ser consultadas, mas a cobertura não está confirmada. É necessário avaliar o endereço, a disponibilidade e a data pretendida.'], ['Posso fazer a consulta antes de viajar?', 'Sim. Informe a data desejada e aguarde a confirmação de prazo. A consulta não reserva produtos nem garante entrega na chegada.']],
+    faq: [['Atendem Porto de Galinhas e Serrambi?', 'As localidades podem ser consultadas. O atendimento avalia o endereço, a disponibilidade e a data pretendida para confirmar frete e prazo.'], ['Posso fazer a consulta antes de viajar?', 'Sim. Informe a data desejada e aguarde a confirmação de prazo. A consulta não reserva produtos nem garante entrega na chegada.']],
     guide: 'cesta-com-carnes-e-refrigerantes', nearby: ['cabo-de-santo-agostinho', 'jaboatao-dos-guararapes']
   },
   {
@@ -208,7 +208,7 @@ export const cities = [
     taskTitle: 'Se pretende revender, comece pelo planejamento',
     task: 'Antes de anunciar cestas a outras pessoas, confira fornecedor, composição, custo de aquisição, embalagem, transporte e capacidade de entrega. Estude o guia de venda de cestas para montar a conta e organizar o atendimento. O conteúdo é educativo; a Cestas Populares não anuncia programa de revendedores nesta página.',
     steps: [['Informe Vitória por completo', 'Acrescente o bairro e Pirituba ou outra localidade quando fizer parte do destino.'], ['Esclareça a finalidade', 'Diga se a consulta é para consumo ou para avaliar uma compra maior, sem presumir condições especiais.'], ['Some todos os custos', 'Compare alimentos, frete e eventual transporte adicional antes de confirmar ou divulgar uma oferta própria.']],
-    faq: [['Vitória de Santo Antão faz parte da RMR nesta lista?', 'Não. O site apresenta os 14 municípios da Região Metropolitana e mantém Vitória em uma seção adicional, com atendimento sob consulta.'], ['Posso me cadastrar como revendedor?', 'Não há cadastro, tabela de atacado ou programa de revenda confirmado. O guia ensina planejamento de uma operação própria e não representa convite de parceria.']],
+    faq: [['Vitória de Santo Antão faz parte da RMR nesta lista?', 'Não. O site apresenta os 14 municípios da Região Metropolitana e mantém Vitória em uma seção adicional. Atendemos a cidade; o frete e o prazo são confirmados pelo endereço.'], ['Posso me cadastrar como revendedor?', 'Não há cadastro, tabela de atacado ou programa de revenda confirmado. O guia ensina planejamento de uma operação própria e não representa convite de parceria.']],
     guide: 'como-vender-cestas-basicas', nearby: ['moreno', 'jaboatao-dos-guararapes']
   }
 ];

@@ -4,12 +4,13 @@ export default {
   brand: 'Cestas Populares',
   domain: 'https://cestaspopulares.com.br',
   productionBranch: 'main',
-  whatsapp: '5581997716247', // Confirmado por Celso em 12/09/2026.
+  whatsapp: '5581991317454', // Mesmo WhatsApp da loja Móveis Populares PE (Celso, 10/11/2026: mesma operação).
   contact: { email: '', phone: '', hours: '' },
   business: { responsible: '', legalName: '', cnpj: '', registrationStatus: 'pending', address: '' },
   privacy: { email: '', contactConfirmed: false, retention: '' },
   delivery: {
-    confirmedCities: [],
+    // Mesma operação e mesma entrega da loja de móveis (Celso, 10/11/2026). Frete e prazo por bairro.
+    confirmedCities: ['Recife', 'Jaboatão dos Guararapes', 'Olinda', 'Paulista', 'Abreu e Lima', 'Araçoiaba', 'Cabo de Santo Agostinho', 'Camaragibe', 'Igarassu', 'Ilha de Itamaracá', 'Ipojuca', 'Itapissuma', 'Moreno', 'São Lourenço da Mata', 'Vitória de Santo Antão'],
     // 14 municípios da RMR, conferidos em fonte oficial em 12/09/2026.
     plannedCities: ['Recife', 'Jaboatão dos Guararapes', 'Olinda', 'Paulista', 'Abreu e Lima', 'Araçoiaba', 'Cabo de Santo Agostinho', 'Camaragibe', 'Igarassu', 'Ilha de Itamaracá', 'Ipojuca', 'Itapissuma', 'Moreno', 'São Lourenço da Mata'],
     additionalPlannedCities: ['Vitória de Santo Antão'], // Fora da RMR.

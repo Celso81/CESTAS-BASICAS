@@ -107,7 +107,8 @@ test('Todas as cidades configuradas têm página própria e caminho de navegaç�
     assert.ok(page);
     const crumbs = JSON.parse(structuredData(config, page))['@graph'].find(item => item['@type'] === 'BreadcrumbList').itemListElement;
     assert.deepEqual(crumbs.map(item => item.item), [config.domain + '/', config.domain + '/cidades/', config.domain + cityPath(city.slug)]);
-    assert.match(page.body, /Atendimento sob consulta/);
+    // Cidade confirmada em config.delivery.confirmedCities mostra o atendimento; as demais continuam sob consulta.
+    assert.match(page.body, config.delivery.confirmedCities.includes(city.name) ? new RegExp(`Atendemos ${city.name}\.`) : /Atendimento sob consulta/);
     assert.ok(page.body.includes(`value="${city.name}"`));
     assert.ok(page.body.includes(city.source.url));
   }

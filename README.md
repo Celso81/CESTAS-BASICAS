@@ -64,7 +64,7 @@ Modalidades como parcelamento, compra sem cartão, crediário, fiado, boleto e d
 
 ## Publicação e dados comerciais
 
-Estado atual: **produção**, com publicação normal e indexação autorizadas por Celso em 12/09/2026. WhatsApp confirmado **(81) 99771-6247**, catálogo vazio e cobertura sob consulta. Os links abrem o WhatsApp apenas após ação do visitante. Não há mensagem automática, coleta em banco de dados ou pedido automático.
+Estado atual: **produção**, com publicação normal e indexação autorizadas por Celso em 12/09/2026. WhatsApp **(81) 99131-7454**, o mesmo da loja Móveis Populares PE desde 10/11/2026 (antes (81) 99771-6247), catálogo vazio e cobertura sob consulta. Os links abrem o WhatsApp apenas após ação do visitante. Não há mensagem automática, coleta em banco de dados ou pedido automático.
 
 Páginas de cidades, catálogo, entregas e contato permitem preparar uma consulta com cidade, bairro e quantidade opcional de 1 a 999 cestas. As sugestões de cidades não afirmam cobertura. O visitante pode conferir a mensagem antes de abrir o WhatsApp; ela pede alimentos, marcas, tamanhos, quantidades, disponibilidade, preço, frete, prazo, total e pagamento. Sem JavaScript, o link direto continua disponível com o mesmo roteiro. Nada é enviado ao atendimento pelo site.
 
